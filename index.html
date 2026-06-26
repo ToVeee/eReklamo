@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #categories{
+            font-size: 13px;
+        }
+        #hed{
+            text-align: center;
+            margin: 50px
+        }
+        #dabox{
+            display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center;     /* Centers vertically */
+        }
+        #cuntainer{
+            width: 75px;
+            height: 36px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            flex-direction: row;
+        }
+        .cat{
+            width: px;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="hed">Welcome to eReklamo!</h1>
+    
+   <form action="/submit" method="POST"> 
+    <div id="dabox">
+    <div> 
+        <label for="complaint">problema mo?</label><br>
+  <input type="text" id="fname" name="complaint" placeholder="your complaint here">
+  <p id="categories">Categories:</p>
+  <div id="cuntainer">
+  <input type="checkbox" name="noise" class="cat">
+  <label for="noise">noise</label>
+  <input type="checkbox" name="cleanliness" class="cat">
+  <label for="cleanliness">cleanliness</label>
+  <input type="checkbox" name="dispute" class="cat">
+  <label for="dispute">dispute</label>
+  <input type="checkbox" name="animals" class="cat">
+  <label for="animals">animals</label>
+  <input type="checkbox" name="property" class="cat">
+  <label for="property">property</label>
+</div><br>
+<input type="submit">
+</div>
+    
+</div>
+</form>
+    <script>
+       
+    </script>
+</body>
+</html>
