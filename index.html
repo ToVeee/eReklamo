@@ -121,48 +121,91 @@
         <div class="welcome-card">
             <div class="school-logo">🏫</div>
             <h1 style="color:#800000">eReklamo</h1>
-            <h2>School Complaint Management System</h2>
-            <p>Report school-related concerns safely and conveniently.</p><button id="startBtn">Proceed to Complaint
-                Form</button>
+            <h3>School Complaint Management System</h3>
+            <p>Report school-related concerns safely and conveniently.</p>
+            <button id="startBtn">Proceed to Complaint Form</button>
         </div>
     </div>
+
     <div id="formPage">
         <form id="rekform">
             <div id="dabox">
                 <h2 style="text-align:center;color:#800000">Complaint Form</h2>
-                <label>Full Name</label><input type="text" required>
-                <label>Student ID</label><input type="text">
-                <label>Grade/Year & Section</label><input type="text">
-                <label>Email</label><input type="email">
-                <label>Contact Number</label><input type="tel">
-                <label>Date of Complaint</label><input type="date">
-                <label>Complaint Description</label><textarea required></textarea>
-                <label>Attach Evidence</label><input type="file">
+
+                <label>Full Name</label> <input type="text" name="fullName" required>
+                <label>Student ID</label> <input type="text" name="studentId">
+                <label>Grade/Year & Section</label><input type="text" name="section" required>
+                <label>Email</label> <input type="email" name="email">
+                <label>Contact Number</label> <input type="text" name="contactNumber">
+                <label>Date of Complaint</label> <input type="date" name="complaintDate">
+
+                <label>Complaint Description</label><textarea name="complaint" required></textarea>
+
                 <p style="margin-top:15px;color:#800000;font-weight:bold">Categories</p>
                 <div id="cuntainer">
-                    <div class="check"><input type="checkbox"> Noise</div>
-                    <div class="check"><input type="checkbox"> Cleanliness</div>
-                    <div class="check"><input type="checkbox"> Bullying</div>
-                    <div class="check"><input type="checkbox"> Harassment</div>
-                    <div class="check"><input type="checkbox"> Student Dispute</div>
-                    <div class="check"><input type="checkbox"> Teacher Concern</div>
-                    <div class="check"><input type="checkbox"> Damaged Property</div>
-                    <div class="check"><input type="checkbox"> Facilities</div>
-                    <div class="check"><input type="checkbox"> Canteen</div>
-                    <div class="check"><input type="checkbox"> Internet/Computer Lab</div>
-                    <div class="check"><input id="others" type="checkbox"> Others</div>
-                    <input id="otherText" type="text" placeholder="If others, specify...">
+                    <div class="check"><input type="checkbox" name="noise" value="true"> Noise</div>
+                    <div class="check"><input type="checkbox" name="cleanliness" value="true"> Cleanliness</div>
+                    <div class="check"><input type="checkbox" name="bullying" value="true"> Bullying</div>
+                    <div class="check"><input type="checkbox" name="harassment" value="true"> Harassment</div>
+                    <div class="check"><input type="checkbox" name="dispute" value="true"> Student Dispute</div>
+                    <div class="check"><input type="checkbox" name="teacherConcern" value="true"> Teacher Concern</div>
+                    <div class="check"><input type="checkbox" name="property" value="true"> Damaged Property</div>
+                    <div class="check"><input type="checkbox" name="facilities" value="true"> Facilities</div>
+                    <div class="check"><input type="checkbox" name="canteen" value="true"> Canteen</div>
+                    <div class="check"><input type="checkbox" name="internetLab" value="true"> Internet/Computer Lab
+                    </div>
+                    <div class="check"><input id="others" type="checkbox" name="otherCategory" value="true"> Others
+                    </div>
+                    <input id="otherText" type="text" name="otherDetails" placeholder="If others, specify...">
                 </div>
-                <div class="check"><input type="checkbox"> Submit as Anonymous</div>
+                <div class="check"><input type="checkbox" name="anonymous" value="true"> Submit as Anonymous</div>
                 <div class="check"><input type="checkbox" required> I certify the information is true.</div>
+
                 <input type="submit" value="Submit Complaint" style="width:100%;margin-top:20px">
             </div>
         </form>
     </div>
+
     <script>
+        // Page navigation logic
         startBtn.onclick = () => { welcomePage.style.display = 'none'; formPage.style.display = 'flex'; };
         others.onchange = () => { otherText.style.display = others.checked ? 'block' : 'none'; if (!others.checked) otherText.value = ''; };
-        rekform.onsubmit = e => { e.preventDefault(); alert('Complaint submitted successfully!'); };
+
+        const form = document.getElementById('rekform');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevents the browser from reloading the page
+
+            const formData = new FormData(form);
+            const data = {};
+
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            try {
+                const response = await fetch('http://localhost:3000/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data) // Converts HTML fields into a JSON string for Node.js
+                });
+
+                if (response.ok) {
+                    alert('Complaint submitted successfully!');
+                    form.reset();
+
+                    formPage.style.display = 'none';
+                    welcomePage.style.display = 'flex';
+                } else {
+                    alert('Failed to submit complaint.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while submitting the complaint.');
+            }
+        });
     </script>
 </body>
 
