@@ -1,62 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>eReklamo</title>
     <style>
-        #categories{
-            font-size: 13px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif
         }
-        #hed{
-            text-align: center;
-            margin: 50px
+
+        body {
+            background: #f3f3f3
         }
-        #dabox{
+
+        #welcomePage {
             display: flex;
-  justify-content: center; /* Centers horizontally */
-  align-items: center;     /* Centers vertically */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #800000, #a52a2a)
         }
-        #cuntainer{
-            width: 75px;
-            height: 36px;
-            overflow-y: scroll;
-            overflow-x: hidden;
-            flex-direction: row;
+
+        .welcome-card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 14px;
+            max-width: 650px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .25)
         }
-        .cat{
-            width: px;
+
+        .school-logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: #800000;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px
+        }
+
+        #startBtn,
+        input[type=submit] {
+            background: #800000;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer
+        }
+
+        #formPage {
+            display: none;
+            justify-content: center;
+            padding: 30px
+        }
+
+        #rekform {
+            width: 560px
+        }
+
+        #dabox {
+            background: #fff;
+            padding: 30px;
+            border-top: 8px solid #800000;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .15)
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 12px
+        }
+
+        input[type=text],
+        input[type=email],
+        input[type=tel],
+        input[type=date],
+        input[type=file],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 6px
+        }
+
+        textarea {
+            min-height: 100px
+        }
+
+        #cuntainer {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            max-height: 220px;
+            overflow: auto
+        }
+
+        .check {
+            margin: 6px 0
+        }
+
+        #otherText {
+            display: none
         }
     </style>
 </head>
+
 <body>
-    <h1 id="hed">Welcome to eReklamo!</h1>
-    
-   <form action="/submit" method="POST"> 
-    <div id="dabox">
-    <div> 
-        <label for="complaint">problema mo?</label><br>
-  <input type="text" id="fname" name="complaint" placeholder="your complaint here">
-  <p id="categories">Categories:</p>
-  <div id="cuntainer">
-  <input type="checkbox" name="noise" class="cat">
-  <label for="noise">noise</label>
-  <input type="checkbox" name="cleanliness" class="cat">
-  <label for="cleanliness">cleanliness</label>
-  <input type="checkbox" name="dispute" class="cat">
-  <label for="dispute">dispute</label>
-  <input type="checkbox" name="animals" class="cat">
-  <label for="animals">animals</label>
-  <input type="checkbox" name="property" class="cat">
-  <label for="property">property</label>
-</div><br>
-<input type="submit">
-</div>
-    
-</div>
-</form>
+    <div id="welcomePage">
+        <div class="welcome-card">
+            <div class="school-logo">🏫</div>
+            <h1 style="color:#800000">eReklamo</h1>
+            <h2>School Complaint Management System</h2>
+            <p>Report school-related concerns safely and conveniently.</p><button id="startBtn">Proceed to Complaint
+                Form</button>
+        </div>
+    </div>
+    <div id="formPage">
+        <form id="rekform">
+            <div id="dabox">
+                <h2 style="text-align:center;color:#800000">Complaint Form</h2>
+                <label>Full Name</label><input type="text" required>
+                <label>Student ID</label><input type="text">
+                <label>Grade/Year & Section</label><input type="text">
+                <label>Email</label><input type="email">
+                <label>Contact Number</label><input type="tel">
+                <label>Date of Complaint</label><input type="date">
+                <label>Complaint Description</label><textarea required></textarea>
+                <label>Attach Evidence</label><input type="file">
+                <p style="margin-top:15px;color:#800000;font-weight:bold">Categories</p>
+                <div id="cuntainer">
+                    <div class="check"><input type="checkbox"> Noise</div>
+                    <div class="check"><input type="checkbox"> Cleanliness</div>
+                    <div class="check"><input type="checkbox"> Bullying</div>
+                    <div class="check"><input type="checkbox"> Harassment</div>
+                    <div class="check"><input type="checkbox"> Student Dispute</div>
+                    <div class="check"><input type="checkbox"> Teacher Concern</div>
+                    <div class="check"><input type="checkbox"> Damaged Property</div>
+                    <div class="check"><input type="checkbox"> Facilities</div>
+                    <div class="check"><input type="checkbox"> Canteen</div>
+                    <div class="check"><input type="checkbox"> Internet/Computer Lab</div>
+                    <div class="check"><input id="others" type="checkbox"> Others</div>
+                    <input id="otherText" type="text" placeholder="If others, specify...">
+                </div>
+                <div class="check"><input type="checkbox"> Submit as Anonymous</div>
+                <div class="check"><input type="checkbox" required> I certify the information is true.</div>
+                <input type="submit" value="Submit Complaint" style="width:100%;margin-top:20px">
+            </div>
+        </form>
+    </div>
     <script>
-       
+        startBtn.onclick = () => { welcomePage.style.display = 'none'; formPage.style.display = 'flex'; };
+        others.onchange = () => { otherText.style.display = others.checked ? 'block' : 'none'; if (!others.checked) otherText.value = ''; };
+        rekform.onsubmit = e => { e.preventDefault(); alert('Complaint submitted successfully!'); };
     </script>
 </body>
+
 </html>
