@@ -166,7 +166,10 @@
         </form>
     </div>
 
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <script>
+
+       const socket = io('https://rekserver.onrender.com');
         // Page navigation logic
         startBtn.onclick = () => { welcomePage.style.display = 'none'; formPage.style.display = 'flex'; };
         others.onchange = () => { otherText.style.display = others.checked ? 'block' : 'none'; if (!others.checked) otherText.value = ''; };
@@ -184,7 +187,7 @@
             });
 
             try {
-                const response = await fetch('https://rekserver.onrender.com', {
+                const response = await fetch('https://rekserver.onrender.com/submit', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
