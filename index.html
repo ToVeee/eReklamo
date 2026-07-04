@@ -72,13 +72,21 @@
             </div>
         </form>
     </div>
-
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script>
-        const socket = io('https://rekserver.onrender.com');
+       let socket;
 
-        socket.on('connect', () => {
-            console.log('Connected to Render Server WebSocket.');
-        });
+if (typeof io !== "undefined") {
+    socket = io("https://rekserver.onrender.com");
+
+    socket.on("connect", () => {
+        console.log("Connected to Render Server.");
+    });
+
+    socket.on("connect_error", (err) => {
+        console.log("Socket connection failed:", err.message);
+    });
+}
 
         const startBtn = document.getElementById('startBtn');
         const welcomePage = document.getElementById('welcomePage');
@@ -110,7 +118,7 @@
             submitBtn.value = "Processing Prioritization...";
 
             try {
-                const response = await fetch('https://onrender.com/submit', {
+                const response = await fetch('https://rekserver.onrender.com/submit', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data) 
