@@ -165,7 +165,7 @@
         </form>
     </div>
 
-    <script>
+         <script>
         // Start Socket Connection to Render
         const socket = io('https://rekserver.onrender.com');
 
@@ -188,15 +188,25 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault(); 
 
-            const formData = new FormData(form);
-            const data = {};
+            // Target form fields explicitly to match exactly what your Express API expects
+            const data = {
+                fullName: form.elements['fullName'].value,
+                studentId: form.elements['studentId'].value,
+                section: form.elements['section'].value,
+                email: form.elements['email'].value,
+                contactNumber: form.elements['contactNumber'].value,
+                complaintDate: form.elements['complaintDate'].value || new Date().toLocaleDateString(),
+                complaint: form.elements['complaint'].value,
+                // Explicitly send true/false strings so your backend logic evaluates cleanly
+                anonymous: form.elements['anonymous'].checked ? 'true' : 'false'
+            };
 
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
+            // Change Submit Button state to reflect your artificial delay
+            const submitBtn = form.querySelector('input[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.value = "Processing Prioritization...";
 
             try {
-                // FIXED: Changed endpoint url to point directly to /submit
                 const response = await fetch('https://rekserver.onrender.com/submit', {
                     method: 'POST',
                     headers: {
@@ -209,15 +219,18 @@
                     alert('Complaint submitted successfully!');
                     form.reset();
                     otherText.style.display = 'none';
-
                     formPage.style.display = 'none';
                     welcomePage.style.display = 'flex';
                 } else {
-                    alert('Failed to submit complaint.');
+                    alert('Failed to submit complaint. Server returned an error.');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('An error occurred while submitting the complaint.');
+                alert('An error occurred while connecting to the server.');
+            } finally {
+                // Restore button state
+                submitBtn.disabled = false;
+                submitBtn.value = "Submit Complaint";
             }
         });
     </script>
