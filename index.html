@@ -251,6 +251,7 @@
         const others = document.getElementById('others');
         const otherText = document.getElementById('otherText');
         const sbmtBtn = document.getElementById('submitBtn');
+        const scanBtn = document.getElementByid('scan-btn');
 
         startBtn.onclick = () => { welcomePage.style.display = 'none'; formPage.style.display = 'flex'; };
         others.onchange = () => { otherText.style.display = others.checked ? 'block' : 'none'; if (!others.checked) otherText.value = ''; };
@@ -292,6 +293,9 @@
                         `https://toveee.github.io/public-complaints-dashboard/#${trackingId}`;
 
                     document.getElementById("url-display").textContent = dashboardURL;
+                    scanBtn.addEventListener("click", () => {
+        window.location.hash = dashboarduRL;
+    });
 
                     QRCode.toCanvas(
                         document.getElementById("qr-canvas"),
@@ -318,9 +322,6 @@
 
 
         });
-        scanBtn.addEventListener("click", () => {
-        window.location.hash = dashboarduRL;
-    });
     </script>
 </body>
 
