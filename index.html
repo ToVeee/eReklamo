@@ -134,17 +134,20 @@
             height: auto;
         }
 
-        .qr-generator-panel {
-            flex: 1;
+       .qr-generator-panel {
+            position: fixed;      /* Always stays on screen */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        
+            width: 420px;
+            padding: 25px;
+        
             background: white;
-            padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
-            position: absolute;
-            top: 20px;
-            height: 350px;
-            width: 400px;
-
+            box-shadow: 0 10px 30px rgba(0,0,0,.3);
+        
+            z-index: 9999;        /* Keeps it above everything */
         }
 
         .container {
@@ -171,7 +174,7 @@
 
         <div class="qr-generator-panel">
 
-            <h2>Select an Item</h2>
+            <h2>Check your complaint</h2>
 
             <canvas id="qr-canvas"></canvas>
 
@@ -181,7 +184,7 @@
             </p>
 
             <button id="scan-btn">
-                Simulate QR Scan
+                Check your complaint
             </button>
 
         </div>
@@ -286,7 +289,7 @@
                     const trackingId = result.trackingId;
 
                     const dashboardURL =
-                        `Your site is live at https://toveee.github.io/public-complaints-dashboard/#${trackingId}`;
+                        `https://toveee.github.io/public-complaints-dashboard/#${trackingId}`;
 
                     document.getElementById("url-display").textContent = dashboardURL;
 
