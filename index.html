@@ -251,7 +251,7 @@
         const others = document.getElementById('others');
         const otherText = document.getElementById('otherText');
         const sbmtBtn = document.getElementById('submitBtn');
-        const scanBtn = document.getElementByid('scan-btn');
+        const scanBtn = document.getElementById('scan-btn');
 
         startBtn.onclick = () => { welcomePage.style.display = 'none'; formPage.style.display = 'flex'; };
         others.onchange = () => { otherText.style.display = others.checked ? 'block' : 'none'; if (!others.checked) otherText.value = ''; };
