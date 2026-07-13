@@ -35,16 +35,26 @@
         }
 
         .school-logo {
-            width: 90px;
-            height: 90px;
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
-            background: #800000;
-            color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
-            font-size: 40px
+            font-size: 40px;
+            overflow: hidden;
+        }
+
+        #logo {
+            display: block;
+            margin: 0 auto;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
         #startBtn,
@@ -133,20 +143,22 @@
             height: auto;
         }
 
-       .qr-generator-panel {
-            position: fixed;      /* Always stays on screen */
+        .qr-generator-panel {
+            position: fixed;
+            /* Always stays on screen */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-        
+
             width: 420px;
             padding: 25px;
-        
+
             background: white;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,.3);
-        
-            z-index: 999;        /* Keeps it above everything */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+
+            z-index: 999;
+            /* Keeps it above everything */
         }
 
         .container {
@@ -161,7 +173,7 @@
 <body>
     <div id="welcomePage">
         <div class="welcome-card">
-            <div class="school-logo"><img scr="erek.jpg"></div>
+            <div class="school-logo"><img id="logo" src="erek.jpg"></div>
             <h1 style="color:#800000">eReklamo</h1>
             <h3>School Complaint Management System</h3>
             <p>Report school-related concerns safely and conveniently.</p>
@@ -293,8 +305,8 @@
 
                     document.getElementById("url-display").textContent = dashboardURL;
                     scanBtn.addEventListener("click", () => {
-        window.location.href = dashboardURL;
-    });
+                        window.location.href = dashboardURL;
+                    });
 
                     QRCode.toCanvas(
                         document.getElementById("qr-canvas"),
