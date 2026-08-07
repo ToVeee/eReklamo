@@ -166,6 +166,14 @@
             justify-content: center;
             align-items: center;
         }
+
+        .required{
+            border-bottom: rgba(97, 97, 97, 0.366) 2px solid;
+            border-top: rgba(97, 97, 97, 0.366) 2px solid;
+            border-radius: 5px;
+            padding: 2px;
+            margin-top: 10px;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
@@ -205,16 +213,19 @@
     <div id="formPage">
         <form id="rekform">
             <div id="dabox">
-                <h2 style="text-align:center;color:#800000">Complaint Form</h2>
-
+             <h2 style="text-align:center;color:#800000">Complaint Form</h2>
                 <label>Full Name</label> <input type="text" name="fullName" placeholder="Michael J. Jackson" required>
-                <label>Grade/Year & Section</label><input type="text" name="section" required placeholder="12 STEM-C">
+                <div class="required">
+                    <label>Grade/Year & Section</label><input type="text" name="section" required placeholder="12 STEM-C">
+                    <label>Date of Complaint</label> <input type="date" name="complaintDate">
+                <center><p style="font-size:12px;color:#4e4e4e">required information</p></center>
+               </div>
+
                 <label>Email</label> <input type="email" name="email" placeholder="michael.joeseph.jackson@gmail.com">
                 <label>Contact Number</label> <input type="text" name="contactNumber" placeholder="(optional)">
-                <label>Date of Complaint</label> <input type="date" name="complaintDate">
 
                 <label>Complaint Description</label><textarea name="complaint" required></textarea>
-                <label for="photo">Add a photo(optional)</label>
+                <label for="photo">Add a photo</label>
                 <input type="file" name="photo" accept="image/png, image/jpeg">
 
                 <p style="margin-top:15px;color:#800000;font-weight:bold">Categories</p>
