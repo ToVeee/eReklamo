@@ -246,7 +246,7 @@
         let socket;
 
         if (typeof io !== "undefined") {
-            socket = io("https://rekserver.onrender.com");
+            socket = io("rekserver-production.up.railway.app");
 
             socket.on("connect", () => {
                 console.log("Connected to Render Server.");
