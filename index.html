@@ -174,6 +174,21 @@
             padding: 2px;
             margin-top: 10px;
         }
+        .card-thumb{
+  display:block; max-width:180px; max-height:130px; object-fit:cover;
+  border-radius:8px; border:1px solid var(--border); margin:8px 0; cursor:zoom-in;
+}
+.lightbox{
+  position:fixed; inset:0; background:rgba(20,16,16,.88);
+  display:none; align-items:center; justify-content:center; z-index:100; padding:24px;
+}
+.lightbox.open{ display:flex; }
+.lightbox img{ max-width:100%; max-height:100%; border-radius:6px; }
+.lightbox-close{
+  position:absolute; top:18px; right:20px; background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.4); color:#fff; width:38px; height:38px;
+  border-radius:50%; font-size:18px;
+}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
@@ -252,6 +267,10 @@
             </div>
         </form>
     </div>
+    <div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close image">&times;</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script>
         // Single source of truth for your backend's base URL —
