@@ -241,7 +241,8 @@
 
                 <label>Complaint Description</label><textarea name="complaint" required></textarea>
                 <label for="photo">Add a photo</label>
-                <input type="file" name="photo" accept="image/png, image/jpeg">
+                <input type="file" id="photo" name="photo" accept="image/png, image/jpeg">
+                <p id="photoFileName" style="font-size:12px;color:#4e4e4e;margin-top:4px;"></p>
 
                 <p style="margin-top:15px;color:#800000;font-weight:bold">Categories</p>
                 <div id="cuntainer">
@@ -303,6 +304,12 @@
         others.onchange = () => { otherText.style.display = others.checked ? 'block' : 'none'; if (!others.checked) otherText.value = ''; };
 
         const form = document.getElementById('rekform');
+
+        const photoInput = document.getElementById('photo');
+        const photoFileName = document.getElementById('photoFileName');
+        photoInput.addEventListener('change', () => {
+            photoFileName.textContent = photoInput.files[0] ? `Selected: ${photoInput.files[0].name}` : '';
+        });
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
