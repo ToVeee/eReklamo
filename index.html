@@ -5,90 +5,259 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>eReklamo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <style>
+        :root {
+            --ink: #6B1420;
+            --ink-dark: #4A0F17;
+            --gold: #B8863B;
+            --paper: #E9ECF1;
+            --card: #FFFFFF;
+            --text: #23262B;
+            --text-mute: #6B7280;
+            --border: #DBDFE6;
+            --danger-bg: #F6E6E6;
+            --danger-text: #7A2828;
+            --radius: 12px;
+            --shadow: 0 1px 2px rgba(20, 20, 30, .06), 0 10px 24px -14px rgba(20, 20, 30, .22);
+            --font-display: 'Source Serif 4', Georgia, serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'IBM Plex Mono', monospace;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif
+            font-family: var(--font-body);
         }
 
         body {
-            background: #f3f3f3
+            background: var(--paper);
+            color: var(--text);
         }
 
-        #welcomePage {
+        :focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 2px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
             display: flex;
+        }
+
+        /* ---------- Welcome ---------- */
+        #welcomePage {
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #800000, #a52a2a)
+            background: linear-gradient(135deg, var(--ink), #a52a2a);
+            padding: 20px;
         }
 
         .welcome-card {
-            background: #fff;
+            background: var(--card);
             padding: 40px;
-            border-radius: 14px;
-            max-width: 650px;
+            border-radius: 16px;
+            max-width: 480px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .25)
-        }
-
-        .school-logo {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 40px;
-            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
         }
 
         #logo {
             display: block;
-            margin: 0 auto;
-            width: 150px;
-            height: 150px;
+            margin: 0 auto 20px;
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #ffffff;
+            border: 3px solid #fff;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
+        .welcome-card h1 {
+            font-family: var(--font-display);
+            color: var(--ink);
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .welcome-card h3 {
+            font-weight: 500;
+            color: var(--text-mute);
+            margin-top: 4px;
+            font-size: 15px;
+        }
+
+        .welcome-card p {
+            margin: 14px 0 22px;
+            color: var(--text);
+            font-size: 14.5px;
+        }
+
+        /* ---------- Buttons (shared) ---------- */
         #startBtn,
-        input[type=submit] {
-            background: #800000;
+        input[type=submit],
+        .primary-btn {
+            background: var(--ink);
             color: #fff;
             border: none;
             border-radius: 8px;
-            padding: 12px;
-            cursor: pointer
+            padding: 13px;
+            font-weight: 600;
+            font-size: 14.5px;
+            cursor: pointer;
         }
 
+        #startBtn:hover,
+        input[type=submit]:hover,
+        .primary-btn:hover {
+            background: var(--ink-dark);
+        }
+
+        .secondary-btn {
+            background: var(--paper);
+            color: var(--ink-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 13px;
+            font-weight: 600;
+            font-size: 14.5px;
+            cursor: pointer;
+        }
+
+        .secondary-btn:hover {
+            background: #dde1e8;
+        }
+
+        input[type=submit]:disabled {
+            opacity: .7;
+            cursor: default;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: .7;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        input[type=submit]:disabled {
+            animation: pulse 1.2s ease-in-out infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            input[type=submit]:disabled {
+                animation: none;
+            }
+        }
+
+        /* ---------- Form screen ---------- */
         #formPage {
-            display: none;
             justify-content: center;
-            padding: 30px
+            padding: 30px 16px;
         }
 
         #rekform {
-            width: 560px
+            width: 100%;
+            max-width: 560px;
         }
 
-        #dabox {
-            background: #fff;
-            padding: 30px;
-            border-top: 8px solid #800000;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, .15)
+        .form-card {
+            background: var(--card);
+            padding: 30px 30px 34px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
         }
 
-        label {
+        .form-card h2 {
+            font-family: var(--font-display);
+            text-align: center;
+            color: var(--ink);
+            font-weight: 700;
+            font-size: 22px;
+        }
+
+        .required-note {
+            text-align: center;
+            font-size: 12.5px;
+            color: var(--text-mute);
+            margin: 6px 0 26px;
+        }
+
+        .req-mark {
+            color: var(--ink);
+        }
+
+        .form-section {
+            margin-bottom: 26px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .form-section:first-of-type {
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .section-label {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .section-eyebrow {
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            border-radius: 4px;
+            padding: 2px 7px;
+            white-space: nowrap;
+        }
+
+        .section-label h3 {
+            font-family: var(--font-display);
+            font-size: 16px;
+            color: var(--ink-dark);
+            font-weight: 700;
+        }
+
+        .optional-tag {
+            font-family: var(--font-body);
+            font-weight: 400;
+            font-size: 12.5px;
+            color: var(--text-mute);
+        }
+
+        label.field-label {
             display: block;
-            font-weight: bold;
-            margin-top: 12px
+            font-weight: 600;
+            font-size: 13.5px;
+            margin-top: 14px;
+            margin-bottom: 4px;
+        }
+
+        label.field-label:first-child {
+            margin-top: 0;
         }
 
         input[type=text],
@@ -98,225 +267,405 @@
         input[type=file],
         textarea {
             width: 100%;
-            padding: 10px;
-            margin-top: 6px;
-            border: 1px solid #ccc;
-            border-radius: 6px
+            padding: 11px 12px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            font-size: 14.5px;
+            background: var(--paper);
+            margin-bottom: 6px;
+        }
+
+        input:focus,
+        textarea:focus {
+            background: #fff;
         }
 
         textarea {
-            min-height: 100px
+            min-height: 110px;
+            resize: vertical;
         }
 
-        #cuntainer {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-top: 10px;
-            max-height: 220px;
-            overflow: auto
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
 
-        .check {
-            margin: 6px 0
+        #photoFileName {
+            font-size: 12px;
+            color: var(--text-mute);
+            margin-top: 5px;
+        }
+
+        /* ---------- Category grid ---------- */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 6px;
+        }
+
+        label.check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 400;
+            font-size: 13.5px;
+            padding: 9px 10px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        label.check:hover {
+            background: var(--paper);
+        }
+
+        label.check input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--ink);
+            flex-shrink: 0;
         }
 
         #otherText {
-            display: none
+            margin-top: 8px;
         }
 
-        #qr-canvas {
+        .form-footer {
+            margin-top: 22px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .form-footer label.check {
+            padding: 9px 0;
+        }
+
+        #formError {
+            display: none;
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            font-size: 13px;
+            font-weight: 600;
+            padding: 10px 12px;
+            border-radius: 7px;
+            margin-top: 14px;
+        }
+
+        #formError.show {
+            display: block;
+        }
+
+        input[type=submit] {
+            width: 100%;
+            margin-top: 18px;
+        }
+
+        /* ---------- Success screen ---------- */
+        #successPage {
+            justify-content: center;
+            padding: 30px 16px;
+        }
+
+        .success-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 34px 30px;
+            text-align: center;
+        }
+
+        .success-seal {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 16px;
+            border: 2.5px solid var(--ink);
+            border-radius: 50%;
             display: flex;
-            margin-top: 20px;
-            border: 1px solid #ccc;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(-6deg);
+            color: var(--ink);
+        }
+
+        .success-card h2 {
+            font-family: var(--font-display);
+            color: var(--ink-dark);
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .success-card>p {
+            color: var(--text-mute);
+            font-size: 13.5px;
+            margin-top: 8px;
+        }
+
+        .code-box {
+            margin: 22px 0;
+            padding: 16px;
+            background: var(--paper);
+            border-radius: 10px;
+        }
+
+        .ticket-label {
+            display: block;
+            font-size: 10.5px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-mute);
+            margin-bottom: 6px;
+        }
+
+        .ticket-code {
+            font-family: var(--font-mono);
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            color: var(--ink-dark);
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #copyCodeBtn {
+            background: none;
+            border: 1px solid var(--border);
             border-radius: 6px;
-            position: flex;
-            top: 10px;
-            right: 10px;
-            background: #fff
+            padding: 6px 14px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--ink);
+            cursor: pointer;
+        }
+
+        #copyCodeBtn:hover {
+            background: #fff;
         }
 
         canvas {
             display: block;
-            margin: 20px auto;
-            background: white;
-            border: 1px solid #ddd;
-            height: auto;
+            margin: 4px auto 20px;
+            border-radius: 8px;
         }
 
-        .qr-generator-panel {
-            position: fixed;
-            /* Always stays on screen */
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-
-            width: 420px;
-            padding: 25px;
-
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
-
-            z-index: 999;
-            /* Keeps it above everything */
+        .success-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .container {
-            display: none;
-            justify-content: center;
-            align-items: center;
+        .form-header {
+            padding: 16px 20px;
+            border-radius: 10px;
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            width: 57%;
+            margin: 0 auto 20px;
+            font-size: 40px;
         }
 
-        .required{
-            border-bottom: rgba(97, 97, 97, 0.366) 2px solid;
-            border-top: rgba(97, 97, 97, 0.366) 2px solid;
-            border-radius: 5px;
-            padding: 2px;
-            margin-top: 10px;
+        #head1 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            color: var(--ink);
+            font-size: 57px;
+            border-bottom: 2px solid var(--ink);
+            border-top: 2px solid var(--ink);
         }
-        .card-thumb{
-  display:block; max-width:180px; max-height:130px; object-fit:cover;
-  border-radius:8px; border:1px solid var(--border); margin:8px 0; cursor:zoom-in;
-}
-.lightbox{
-  position:fixed; inset:0; background:rgba(20,16,16,.88);
-  display:none; align-items:center; justify-content:center; z-index:100; padding:24px;
-}
-.lightbox.open{ display:flex; }
-.lightbox img{ max-width:100%; max-height:100%; border-radius:6px; }
-.lightbox-close{
-  position:absolute; top:18px; right:20px; background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.4); color:#fff; width:38px; height:38px;
-  border-radius:50%; font-size:18px;
-}
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 
 <body>
-    <div id="welcomePage">
+    <div id="welcomePage" class="screen active">
         <div class="welcome-card">
-            <div class="school-logo"><img id="logo" src="ereklamocropped.jpg"></div>
-            <h1 style="color:#800000">eReklamo</h1>
+            <img id="logo" src="ereklamocropped.jpg" alt="School logo">
+            <h1>eReklamo</h1>
             <h3>School Complaint Management System</h3>
             <p>Report school-related concerns safely and conveniently.</p>
-            <button id="startBtn">Proceed to Complaint Form</button>
+            <button id="startBtn" class="primary-btn" style="width:100%">Proceed to Complaint Form</button>
         </div>
     </div>
 
-    <div class="container">
+    <div id="formPage" class="screen">
+        <form id="rekform" novalidate>
+            <div class="form-card">
+                <h2 id="head1">Complaint Form</h2>
+                <p class="required-note">Fields marked <span class="req-mark">*</span> are required.</p>
 
-        <div class="qr-generator-panel">
-
-            <h2>Check your complaint</h2>
-
-            <canvas id="qr-canvas"></canvas>
-
-            <p>
-                <strong>QR URL:</strong><br>
-                <span id="url-display"></span>
-            </p>
-
-            <button id="scan-btn">
-                Check your complaint
-            </button>
-
-        </div>
-
-    </div>
-
-    <div id="formPage">
-        <form id="rekform">
-            <div id="dabox">
-             <h2 style="text-align:center;color:#800000">Complaint Form</h2>
-                <label>Full Name</label> <input type="text" name="fullName" placeholder="Michael J. Jackson" required>
-                <div class="required">
-                    <label>Grade/Year & Section</label><input type="text" name="section" required placeholder="12 STEM-C">
-                    <label>Date of Complaint</label> <input type="date" name="complaintDate">
-                <center><p style="font-size:12px;color:#4e4e4e">required information</p></center>
-               </div>
-
-                <label>Email</label> <input type="email" name="email" placeholder="michael.joeseph.jackson@gmail.com">
-                <label>Contact Number</label> <input type="text" name="contactNumber" placeholder="(optional)">
-
-                <label>Complaint Description</label><textarea name="complaint" required></textarea>
-                <label for="photo">Add a photo</label>
-                <input type="file" id="photo" name="photo" accept="image/png, image/jpeg">
-                <p id="photoFileName" style="font-size:12px;color:#4e4e4e;margin-top:4px;"></p>
-
-                <p style="margin-top:15px;color:#800000;font-weight:bold">Categories</p>
-                <div id="cuntainer">
-                    <div class="check"><input type="checkbox" name="noise" value="true"> Noise</div>
-                    <div class="check"><input type="checkbox" name="cleanliness" value="true"> Cleanliness</div>
-                    <div class="check"><input type="checkbox" name="bullying" value="true"> Bullying</div>
-                    <div class="check"><input type="checkbox" name="harassment" value="true"> Harassment</div>
-                    <div class="check"><input type="checkbox" name="dispute" value="true"> Student Dispute</div>
-                    <div class="check"><input type="checkbox" name="teacherConcern" value="true"> Teacher Concern</div>
-                    <div class="check"><input type="checkbox" name="property" value="true"> Damaged Property</div>
-                    <div class="check"><input type="checkbox" name="facilities" value="true"> Facilities</div>
-                    <div class="check"><input type="checkbox" name="canteen" value="true"> Canteen</div>
-                    <div class="check"><input type="checkbox" name="internetLab" value="true"> Internet/Computer Lab
+                <section class="form-section">
+                    <div class="section-label">
+                        <h3>About You</h3>
                     </div>
-                    <div class="check"><input id="others" type="checkbox" name="otherCategory" value="true"> Others
+
+                    <label class="field-label" for="fullName">Full Name <span class="req-mark">*</span></label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Michael J. Jackson" required>
+
+                    <div class="two-col">
+                        <div>
+                            <label class="field-label" for="section">Grade/Year & Section <span
+                                    class="req-mark">*</span></label>
+                            <input type="text" id="section" name="section" required placeholder="12 STEM-C">
+                        </div>
+                        <div>
+                            <label class="field-label" for="complaintDate">Date of Complaint</label>
+                            <input type="date" id="complaintDate" name="complaintDate">
+                        </div>
+                    </div>
+
+                    <div class="two-col">
+                        <div>
+                            <label class="field-label" for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="you@example.com">
+                        </div>
+                        <div>
+                            <label class="field-label" for="contactNumber">Contact Number</label>
+                            <input type="text" id="contactNumber" name="contactNumber" placeholder="(optional)">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="form-section">
+                    <div class="section-label">
+                        <h3>What Happened</h3>
+                    </div>
+
+                    <label class="field-label" for="complaint">Complaint Description <span
+                            class="req-mark">*</span></label>
+                    <textarea id="complaint" name="complaint" required></textarea>
+
+                    <label class="field-label" for="photo">Add a Photo <span
+                            class="optional-tag">(optional)</span></label>
+                    <input type="file" id="photo" name="photo" accept="image/*">
+                    <p id="photoFileName"></p>
+                </section>
+
+                <section class="form-section">
+                    <div class="section-label">
+                        <h3>Category <span class="optional-tag">(optional — helps us sort faster)</span></h3>
+                    </div>
+
+                    <div class="category-grid">
+                        <label class="check"><input type="checkbox" name="noise" value="true"> Noise</label>
+                        <label class="check"><input type="checkbox" name="cleanliness" value="true"> Cleanliness</label>
+                        <label class="check"><input type="checkbox" name="bullying" value="true"> Bullying</label>
+                        <label class="check"><input type="checkbox" name="harassment" value="true"> Harassment</label>
+                        <label class="check"><input type="checkbox" name="dispute" value="true"> Student Dispute</label>
+                        <label class="check"><input type="checkbox" name="teacherConcern" value="true"> Teacher
+                            Concern</label>
+                        <label class="check"><input type="checkbox" name="property" value="true"> Damaged
+                            Property</label>
+                        <label class="check"><input type="checkbox" name="facilities" value="true"> Facilities</label>
+                        <label class="check"><input type="checkbox" name="canteen" value="true"> Canteen</label>
+                        <label class="check"><input type="checkbox" name="internetLab" value="true"> Internet/Computer
+                            Lab</label>
+                        <label class="check"><input id="others" type="checkbox" name="otherCategory" value="true">
+                            Others</label>
                     </div>
                     <input id="otherText" type="text" name="otherDetails" placeholder="If others, specify...">
-                </div>
-                <div class="check"><input type="checkbox" name="anonymous" value="true"> Submit as Anonymous</div>
-                <div class="check"><input type="checkbox" required> I certify the information is true.</div>
+                </section>
 
-                <input id="submitBtn" type="submit" value="Submit Complaint" style="width:100%;margin-top:20px">
+                <div class="form-footer">
+                    <label class="check"><input type="checkbox" name="anonymous" value="true"> Submit as
+                        Anonymous</label>
+                    <label class="check"><input type="checkbox" id="certify" required> I certify the information is
+                        true. <span class="req-mark">*</span></label>
+
+                    <p id="formError" role="alert"></p>
+
+                    <input id="submitBtn" type="submit" value="Submit Complaint">
+                </div>
             </div>
         </form>
     </div>
-    <div class="lightbox" id="lightbox">
-  <button class="lightbox-close" id="lightboxClose" aria-label="Close image">&times;</button>
-  <img id="lightboxImg" src="" alt="">
-</div>
-    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+
+    <div id="successPage" class="screen">
+        <div class="success-card">
+            <div class="success-seal" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <h2>Complaint Submitted</h2>
+            <p>Save this code — you'll need it to check your status later.</p>
+
+            <div class="code-box">
+                <span class="ticket-label">Tracking Code</span>
+                <span class="ticket-code" id="trackingCodeText"></span>
+                <button type="button" id="copyCodeBtn">Copy Code</button>
+            </div>
+
+            <canvas id="qr-canvas"></canvas>
+
+            <div class="success-actions">
+                <button type="button" id="viewStatusBtn" class="primary-btn">Check My Status</button>
+                <button type="button" id="submitAnotherBtn" class="secondary-btn">Submit Another Complaint</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Single source of truth for your backend's base URL —
-        // change it here once and both the live socket and the form submit stay in sync.
         const SERVER_URL = "https://rekserver-production.up.railway.app";
 
         let socket;
-
         if (typeof io !== "undefined") {
             socket = io(SERVER_URL);
-
-            socket.on("connect", () => {
-                console.log("Connected to server.");
-            });
-
-            socket.on("connect_error", (err) => {
-                console.log("Socket connection failed:", err.message);
-            });
+            socket.on("connect", () => console.log("Connected to server."));
+            socket.on("connect_error", (err) => console.log("Socket connection failed:", err.message));
         }
-        const container = document.querySelector('.container');
-        const startBtn = document.getElementById('startBtn');
+
         const welcomePage = document.getElementById('welcomePage');
         const formPage = document.getElementById('formPage');
+        const successPage = document.getElementById('successPage');
+
+        function showScreen(el) {
+            [welcomePage, formPage, successPage].forEach(s => s.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        document.getElementById('startBtn').onclick = () => showScreen(formPage);
+
         const others = document.getElementById('others');
         const otherText = document.getElementById('otherText');
-        const sbmtBtn = document.getElementById('submitBtn');
-        const scanBtn = document.getElementById('scan-btn');
-
-        startBtn.onclick = () => { welcomePage.style.display = 'none'; formPage.style.display = 'flex'; };
-        others.onchange = () => { otherText.style.display = others.checked ? 'block' : 'none'; if (!others.checked) otherText.value = ''; };
+        otherText.style.display = 'none';
+        others.onchange = () => {
+            otherText.style.display = others.checked ? 'block' : 'none';
+            if (!others.checked) otherText.value = '';
+        };
 
         const form = document.getElementById('rekform');
-
         const photoInput = document.getElementById('photo');
         const photoFileName = document.getElementById('photoFileName');
+        const formError = document.getElementById('formError');
+
         photoInput.addEventListener('change', () => {
             photoFileName.textContent = photoInput.files[0] ? `Selected: ${photoInput.files[0].name}` : '';
         });
 
+        function showFormError(message) {
+            formError.textContent = message;
+            formError.classList.add('show');
+        }
+
+        function clearFormError() {
+            formError.textContent = '';
+            formError.classList.remove('show');
+        }
+
+        function collectCheckedCategories() {
+            const boxes = form.querySelectorAll('.category-grid input[type="checkbox"]:checked');
+            return Array.from(boxes).map(b => b.name === 'otherCategory' ? (otherText.value.trim() || 'Other') : b.name);
+        }
+
+        let lastTrackingId = '';
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            clearFormError();
 
-            // FormData instead of a plain object: this is what lets the photo
-            // travel in the same request as the text fields, as multipart/form-data —
-            // which is what the server's multer middleware expects.
+            if (!form.reportValidity()) return;
+
             const formData = new FormData();
             formData.append('fullName', form.elements['fullName'].value);
             formData.append('section', form.elements['section'].value);
@@ -326,15 +675,19 @@
             formData.append('complaint', form.elements['complaint'].value);
             formData.append('anonymous', form.elements['anonymous'].checked ? 'true' : 'false');
 
-            const photoFile = form.elements['photo'].files[0];
-            if (photoFile) {
-                // key MUST be 'image' — that's the field name the server's
-                // upload.single('image') is listening for, regardless of what
-                // the <input name="..."> is called on this end.
-                formData.append('image', photoFile);
+            // Self-reported categories the student checked — sent along for reference,
+            // even though final categorization is decided by the AI scoring step.
+            const checkedCategories = collectCheckedCategories();
+            if (checkedCategories.length) {
+                formData.append('studentCategories', checkedCategories.join(', '));
             }
 
-            const submitBtn = form.querySelector('input[type="submit"]');
+            const photoFile = photoInput.files[0];
+            if (photoFile) {
+                formData.append('image', photoFile); // must be 'image' — matches server's upload.single('image')
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.value = "Processing Prioritization...";
 
@@ -342,45 +695,51 @@
                 const response = await fetch(`${SERVER_URL}/submit`, {
                     method: 'POST',
                     body: formData
-                    // No Content-Type header here on purpose — the browser sets
-                    // multipart/form-data with the correct boundary automatically.
-                    // Setting it manually breaks the upload.
                 });
 
                 if (response.ok) {
-
                     const result = await response.json();
+                    lastTrackingId = result.trackingId;
 
-                    const trackingId = result.trackingId;
+                    document.getElementById('trackingCodeText').textContent = lastTrackingId;
 
-                    const dashboardURL =
-                        `https://toveee.github.io/complaint-status/#${trackingId}`;
+                    const dashboardURL = `https://toveee.github.io/complaint-status/#${lastTrackingId}`;
+                    QRCode.toCanvas(document.getElementById("qr-canvas"), dashboardURL, { width: 200 });
 
-                    document.getElementById("url-display").textContent = dashboardURL;
-                    scanBtn.addEventListener("click", () => {
-                        window.location.href = dashboardURL;
-                    });
-
-                    QRCode.toCanvas(
-                        document.getElementById("qr-canvas"),
-                        dashboardURL,
-                        { width: 220 }
-                    );
-
-                    document.getElementById("qr-canvas").style.display = "block";
-                    container.style.display = "flex";
-
-                    alert("Complaint submitted successfully!");
+                    showScreen(successPage);
                 } else {
-                    alert('Failed to submit complaint. Database table error.');
+                    showFormError("We couldn't send your complaint. Please check your connection and try again.");
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('An error occurred while connecting to the server.');
+                showFormError("We couldn't reach the server. Please check your connection and try again.");
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.value = "Submit Complaint";
             }
+        });
+
+        document.getElementById('copyCodeBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('copyCodeBtn');
+            try {
+                await navigator.clipboard.writeText(lastTrackingId);
+                btn.textContent = 'Copied!';
+                setTimeout(() => { btn.textContent = 'Copy Code'; }, 1800);
+            } catch {
+                btn.textContent = 'Copy failed — select manually';
+            }
+        });
+
+        document.getElementById('viewStatusBtn').addEventListener('click', () => {
+            window.location.href = `https://toveee.github.io/complaint-status/#${lastTrackingId}`;
+        });
+
+        document.getElementById('submitAnotherBtn').addEventListener('click', () => {
+            form.reset();
+            photoFileName.textContent = '';
+            otherText.style.display = 'none';
+            clearFormError();
+            showScreen(formPage);
         });
     </script>
 </body>
