@@ -1,4 +1,4 @@
-   const SERVER_URL = "https://rekserver.onrender.com";
+   const SERVER_URL = "https://rekserver.enzonic.dev";
 
         let socket;
         if (typeof io !== "undefined") {
