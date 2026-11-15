@@ -1,4 +1,4 @@
-   const SERVER_URL = "https://rekserver.dpdns.org";
+   const SERVER_URL = "https://api.rekserver.dpdns.org";
 
         let socket;
         if (typeof io !== "undefined") {
