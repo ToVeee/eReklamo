@@ -1,4 +1,4 @@
-   const SERVER_URL = "https://thousand-types-created-nuclear.trycloudflare.com";
+   const SERVER_URL = "https://rekserver.dpdns.org";
 
         let socket;
         if (typeof io !== "undefined") {
